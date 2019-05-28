@@ -25,25 +25,34 @@ public class searchTextInFiles {
 
         try {
 
+
             findFiles(directory);
+
+            findTextInFile();
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println(files);
+        System.out.println(requiredFiles);
+        try {
+            System.out.println(readFile(new File(requiredFiles.get(0))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
     private static RandomAccessFile file;
     private static String text = "повтор";
-    private static List<String> files = new ArrayList<String>();
+    private static List<String> allFiles = new ArrayList<String>();
     private static List<String> requiredFiles = new ArrayList<String>();
 
 
 
-    private static void findFiles(File folder) throws IOException {
+    private static void findFiles(File folder) {
 
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
@@ -54,8 +63,8 @@ public class searchTextInFiles {
 //                System.out.println(file.getAbsolutePath());
 //            }
 
-            if (file.getName().endsWith(".txt")  && findTextInFile(file)) {
-                files.add(file.getAbsolutePath());
+            if (file.getName().endsWith(".txt")) {
+                allFiles.add(file.getAbsolutePath());
 
             }
 
@@ -74,7 +83,7 @@ public class searchTextInFiles {
         String b = file.readLine();
 
         while (b != null) {
-            res += new String(b.getBytes("ISO-8859-1"), "UTF-8") + "\n";
+            res = res + new String(b.getBytes("ISO-8859-1"), "UTF-8") + "\n";
             b = file.readLine();
         }
 
@@ -84,8 +93,14 @@ public class searchTextInFiles {
 
     }
 
-    private static boolean findTextInFile(File file) throws IOException {
-        return readFile(file).contains(text);
+    private static void findTextInFile() throws IOException {
+
+
+       for (String file : allFiles) {
+           if (readFile(new File(file)).contains(text)) {
+               requiredFiles.add(file);
+           }
+       }
     }
 
 
