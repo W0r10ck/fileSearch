@@ -3,8 +3,13 @@ package com.github.search.gui;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class searchTextInFiles {
 
@@ -19,40 +24,32 @@ public class searchTextInFiles {
      * */
 
     public static void main(String[] args) {
-        // File directory = new File("C:\\Users\\omoskale\\Downloads");
+         //File directory = new File("C:\\Users\\omoskale\\Downloads");
         File directory = new File("C:\\Users\\omoskale\\Desktop\\test");
 
 
-        try {
+        findFiles(directory);
 
+       // checkFiles(directory);
 
-            findFiles(directory);
-
-            findTextInFile();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        // findTextInFile();
         System.out.println(requiredFiles);
-        try {
-            System.out.println(readFile(new File(requiredFiles.get(0))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
 
-    private static RandomAccessFile file;
-    private static String text = "повтор";
-    private static List<String> allFiles = new ArrayList<String>();
-    private static List<String> requiredFiles = new ArrayList<String>();
+  //  private static RandomAccessFile file;
+    private static String text = "Олег";
+  //  private static List<String> allFiles = new ArrayList<String>();
+    private static List<String> requiredFiles = Collections.synchronizedList(new ArrayList<>());
 
 
 
     private static void findFiles(File folder) {
+
+       List<String> allFiles = new ArrayList<>();
+
 
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
@@ -70,38 +67,71 @@ public class searchTextInFiles {
 
         }
 
+        processAll(allFiles,4);
+
 
     }
 
-    private static String readFile(File currentlyFile) throws IOException {
 
 
-        file = new RandomAccessFile(currentlyFile, "r");
+    /*
+    *   Paths.get(file).toFile().length()  показывает размер файла в байтах
+    *
+    */
 
-        String res = "";
 
-        String b = file.readLine();
 
-        while (b != null) {
-            res = res + new String(b.getBytes("ISO-8859-1"), "UTF-8") + "\n";
-            b = file.readLine();
+    private static void processAll (List<String> list,int numThreads) {
+
+        ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+
+        for (final String lis : list) {
+
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    readFile(lis);
+                }
+            });
+
         }
 
-        file.close();
-
-        return res;
+        executorService.shutdown();
 
     }
 
-    private static void findTextInFile() throws IOException {
 
 
-       for (String file : allFiles) {
-           if (readFile(new File(file)).contains(text)) {
-               requiredFiles.add(file);
-           }
-       }
+
+
+    private static void readFile (String file) {
+
+        String a = "";
+        try {
+           // Files.lines(path).forEach(System.out::println);
+            List <String> rows =  Files.readAllLines(Paths.get(file));
+          for (int i = 0; i < rows.size()-1; i++ ) {
+              a = rows.get(i) + rows.get(i+1);
+              if (a.contains(text)){
+                  requiredFiles.add(file);
+              }
+          }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+
+//    private static void checkFiles (File folder) {
+//        findFiles(folder);
+//
+//        for (String file : allFiles) {
+//
+//
+//           readFile(file);
+//       }
+//
+//    }
 
 }
