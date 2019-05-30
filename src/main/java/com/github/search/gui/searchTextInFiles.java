@@ -7,6 +7,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,9 +41,10 @@ public class searchTextInFiles {
 
 
   //  private static RandomAccessFile file;
-    private static String text = "Олег";
+    private static String text = "базука";
   //  private static List<String> allFiles = new ArrayList<String>();
-    private static List<String> requiredFiles = Collections.synchronizedList(new ArrayList<>());
+   // private static List<String> requiredFiles = Collections.synchronizedList(new ArrayList<>());
+    private static List<String> requiredFiles = new ArrayList<>();
 
 
 
@@ -67,7 +69,11 @@ public class searchTextInFiles {
 
         }
 
-        processAll(allFiles,4);
+        try {
+            processAll(allFiles,4);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -81,23 +87,26 @@ public class searchTextInFiles {
 
 
 
-    private static void processAll (List<String> list,int numThreads) {
+    private static void processAll (List<String> list,int numThreads) throws InterruptedException {
 
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+        CountDownLatch latch = new CountDownLatch(list.size());
 
         for (final String lis : list) {
+
 
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     readFile(lis);
+                    latch.countDown();
                 }
             });
 
         }
 
         executorService.shutdown();
-
+        latch.await();
     }
 
 
@@ -114,6 +123,7 @@ public class searchTextInFiles {
               a = rows.get(i) + rows.get(i+1);
               if (a.contains(text)){
                   requiredFiles.add(file);
+                  i = rows.size();
               }
           }
 
