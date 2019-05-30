@@ -30,21 +30,16 @@ public class searchTextInFiles {
 
 
         findFiles(directory);
-
-       // checkFiles(directory);
-
-        // findTextInFile();
         System.out.println(requiredFiles);
 
 
     }
 
 
-  //  private static RandomAccessFile file;
     private static String text = "базука";
-  //  private static List<String> allFiles = new ArrayList<String>();
-   // private static List<String> requiredFiles = Collections.synchronizedList(new ArrayList<>());
-    private static List<String> requiredFiles = new ArrayList<>();
+
+    // private static List<String> requiredFiles = new ArrayList<>();
+    private static List<String> requiredFiles = Collections.synchronizedList(new ArrayList<>());
 
 
 
@@ -58,9 +53,6 @@ public class searchTextInFiles {
                 findFiles(file);
                 continue;
             }
-//            if (FilenameUtils.getExtension(file.getName()).equals("docx")) {
-//                System.out.println(file.getAbsolutePath());
-//            }
 
             if (file.getName().endsWith(".txt")) {
                 allFiles.add(file.getAbsolutePath());
@@ -131,17 +123,4 @@ public class searchTextInFiles {
             e.printStackTrace();
         }
     }
-
-
-//    private static void checkFiles (File folder) {
-//        findFiles(folder);
-//
-//        for (String file : allFiles) {
-//
-//
-//           readFile(file);
-//       }
-//
-//    }
-
 }
