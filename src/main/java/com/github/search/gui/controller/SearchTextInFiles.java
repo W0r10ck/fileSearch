@@ -1,18 +1,17 @@
-package com.github.search.gui;
+package com.github.search.gui.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class searchTextInFiles {
+public class SearchTextInFiles {
 
     /*
      * Когда то мне поставили задачу парсить гигабайтных размеров текстовый файл со статистикой.
@@ -24,26 +23,25 @@ public class searchTextInFiles {
      *
      * */
 
-    public static void main(String[] args) {
-         //File directory = new File("C:\\Users\\omoskale\\Downloads");
-        File directory = new File("C:\\Users\\omoskale\\Desktop\\test");
-
-
-        findFiles(directory);
-        System.out.println(requiredFiles);
-
-
-    }
+//    public static void main(String[] args) {
+//         //File directory = new File("C:\\Users\\omoskale\\Downloads");
+//        File directory = new File("C:\\Users\\omoskale\\Desktop\\test");
+//
+//
+//        findFiles(directory);
+//        System.out.println(requiredFiles);
+//
+//
+//    }
 
 
     private static String text = "базука";
 
-    // private static List<String> requiredFiles = new ArrayList<>();
-    private static List<String> requiredFiles = Collections.synchronizedList(new ArrayList<>());
+    private static List<String> requiredFiles = new CopyOnWriteArrayList<>();
 
 
 
-    private static void findFiles(File folder) {
+    public static void findFiles(File folder) {
 
        List<String> allFiles = new ArrayList<>();
 
@@ -67,6 +65,7 @@ public class searchTextInFiles {
             e.printStackTrace();
         }
 
+        System.out.println(allFiles);
 
     }
 
