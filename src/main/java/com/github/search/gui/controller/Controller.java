@@ -3,6 +3,7 @@ package com.github.search.gui.controller;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.github.search.gui.Main;
@@ -83,8 +84,9 @@ public class Controller extends SearchTextInFiles {
         });
 
         Search.setOnAction(event -> {
-            findFiles(new File(directory.getText()));
-
+            List<String> listWithFiles =  searchFiles(new File(directory.getText()),format.getText(),searchText.getText());
+            System.out.println(listWithFiles);
+            textArea.setPromptText(listWithFiles.toString());
         });
 
 

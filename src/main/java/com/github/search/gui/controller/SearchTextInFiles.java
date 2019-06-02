@@ -35,24 +35,27 @@ public class SearchTextInFiles {
 //    }
 
 
-    private static String text = "базука";
 
     private static List<String> requiredFiles = new CopyOnWriteArrayList<>();
 
+    public List<String> searchFiles (File dir, String format, String textForSearch ) {
+        findFiles(dir,format,textForSearch);
 
+        return requiredFiles;
+    }
 
-    public static void findFiles(File folder) {
+    private static void findFiles(File folder, String format, String textForSearch) {
 
        List<String> allFiles = new ArrayList<>();
 
 
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                findFiles(file);
+                findFiles(file,format,textForSearch);
                 continue;
             }
 
-            if (file.getName().endsWith(".txt")) {
+            if (file.getName().endsWith(format)) {
                 allFiles.add(file.getAbsolutePath());
 
             }
@@ -60,12 +63,10 @@ public class SearchTextInFiles {
         }
 
         try {
-            processAll(allFiles,4);
+            processAll(allFiles,4,textForSearch);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        System.out.println(allFiles);
 
     }
 
@@ -78,7 +79,7 @@ public class SearchTextInFiles {
 
 
 
-    private static void processAll (List<String> list,int numThreads) throws InterruptedException {
+    private static void processAll (List<String> list,int numThreads, String text) throws InterruptedException {
 
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         CountDownLatch latch = new CountDownLatch(list.size());
@@ -89,7 +90,7 @@ public class SearchTextInFiles {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    readFile(lis);
+                    readFile(lis,text);
                     latch.countDown();
                 }
             });
@@ -104,7 +105,7 @@ public class SearchTextInFiles {
 
 
 
-    private static void readFile (String file) {
+    private static void readFile (String file, String text) {
 
         String a = "";
         try {
