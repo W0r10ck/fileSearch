@@ -73,7 +73,7 @@
               </textFill>
             </Label>
                   <TreeView layoutX="11.0" layoutY="14.0" prefHeight="537.0" prefWidth="198.0" />
-                  <TreeView fx:id="treeWiew" prefHeight="551.0" prefWidth="302.0" />
+                  <TreeView fx:id="treeWiew" onContextMenuRequested="#mouseClicked" onMouseClicked="#mouseClicked" prefHeight="551.0" prefWidth="302.0" />
           </children>
         </AnchorPane>
         <ScrollPane prefHeight="-1.0" prefWidth="-1.0">

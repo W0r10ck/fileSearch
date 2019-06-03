@@ -18,6 +18,7 @@ import sun.reflect.generics.tree.Tree;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.beans.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -108,16 +109,6 @@ public class Controller extends SearchTextInFiles {
         Search.setOnAction(event -> {
             listWithFiles =  searchFiles(new File(directory.getText()),format.getText(),searchText.getText());
             treeWiew.setRoot(buildingTree());
-
-
-            ///////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!///////////////////
-            activityFile=listWithFiles.get(0);
-
-            try {
-                textArea.setText(showTextFromFile(activityFile));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         });
 
 
@@ -167,14 +158,20 @@ public class Controller extends SearchTextInFiles {
         });
 
 
+
     }
 
-    private void handleMouseClicked (MouseEvent event){
-        Node node = event.getPickResult().getIntersectedNode();
-        if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)){
+    @FXML
+    private void mouseClicked (MouseEvent event){
 
-          activityFile = (Path) ((TreeItem)treeWiew.getSelectionModel().getSelectedItems()).getValue();
-
+        TreeItem<Path> item = (TreeItem<Path>) treeWiew.getSelectionModel().getSelectedItem();
+        activityFile= item.getValue();
+        numberStart=0;
+        numberEnd=20;
+        try {
+            textArea.setText(showTextFromFile(activityFile));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -183,6 +180,7 @@ public class Controller extends SearchTextInFiles {
 
     private TreeItem buildingTree () {
         TreeItem rootItem = new TreeItem("Files");
+        rootItem.setExpanded(true);
         for (Path p : listWithFiles) {
 
             if (!rootItem.getChildren().contains(p)) {
