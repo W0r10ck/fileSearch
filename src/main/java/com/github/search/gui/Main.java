@@ -16,8 +16,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/samp.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 1500, 900));
+        primaryStage.setTitle("Search files");
+        primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.show();
     }
 

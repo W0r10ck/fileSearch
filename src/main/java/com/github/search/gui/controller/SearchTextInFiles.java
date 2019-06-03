@@ -3,6 +3,7 @@ package com.github.search.gui.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,32 +14,9 @@ import java.util.concurrent.Executors;
 
 public class SearchTextInFiles {
 
-    /*
-     * Когда то мне поставили задачу парсить гигабайтных размеров текстовый файл со статистикой.
-     * Для анализа больших файлов можно разбивать их на куски (тут действительно поможет RandomAccessFile),
-     * а каждый кусок анализировать в отдельном потоке, т. е. создать многопоточное приложение.
-     * Правда здесь возникают другие проблемы, лимитом скорости обработки становится не жесткий диск,
-     * а недостаток мощности процессора, т. е. достигается почти 100% загрузка процессора.
-     *
-     *
-     * */
+    private static List<Path> requiredFiles = new CopyOnWriteArrayList<>();
 
-//    public static void main(String[] args) {
-//         //File directory = new File("C:\\Users\\omoskale\\Downloads");
-//        File directory = new File("C:\\Users\\omoskale\\Desktop\\test");
-//
-//
-//        findFiles(directory);
-//        System.out.println(requiredFiles);
-//
-//
-//    }
-
-
-
-    private static List<String> requiredFiles = new CopyOnWriteArrayList<>();
-
-    public List<String> searchFiles (File dir, String format, String textForSearch ) {
+    public List<Path> searchFiles (File dir, String format, String textForSearch ) {
         findFiles(dir,format,textForSearch);
 
         return requiredFiles;
@@ -114,7 +92,7 @@ public class SearchTextInFiles {
           for (int i = 0; i < rows.size()-1; i++ ) {
               a = rows.get(i) + rows.get(i+1);
               if (a.contains(text)){
-                  requiredFiles.add(file);
+                  requiredFiles.add(Paths.get(file));
                   i = rows.size();
               }
           }

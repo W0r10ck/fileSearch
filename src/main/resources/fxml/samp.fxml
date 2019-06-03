@@ -21,7 +21,7 @@
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.search.gui.controller.Controller">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
+    <MenuBar prefHeight="176.0" prefWidth="1076.0" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
@@ -73,7 +73,7 @@
               </textFill>
             </Label>
                   <TreeView layoutX="11.0" layoutY="14.0" prefHeight="537.0" prefWidth="198.0" />
-                  <TreeView fx:id="treeWiew" prefHeight="551.0" prefWidth="222.0" />
+                  <TreeView fx:id="treeWiew" prefHeight="551.0" prefWidth="302.0" />
           </children>
         </AnchorPane>
         <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
@@ -81,19 +81,24 @@
             <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0">
               <children>
                 <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="View" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                        <TextArea fx:id="textArea" layoutX="-2.0" layoutY="-2.0" prefHeight="551.0" prefWidth="443.0" promptText="Found text" />
+                        <TextArea fx:id="textArea" layoutX="-2.0" layoutY="-2.0" prefHeight="453.0" prefWidth="587.0" promptText="Found text" />
+                        <Button fx:id="nextPage" layoutX="283.0" layoutY="472.0" mnemonicParsing="false" text="Next" />
+                        <Button fx:id="previousPage" layoutX="52.0" layoutY="472.0" mnemonicParsing="false" text="Back" />
+                        <Button fx:id="copyAll" layoutX="160.0" layoutY="472.0" mnemonicParsing="false" text="Copy All" />
               </children>
             </AnchorPane>
           </content>
         </ScrollPane>
         <AnchorPane fx:id="anchorid">
           <children>
-            <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" textFill="$x2" wrapText="false" />
                   <TextField fx:id="directory" layoutX="14.0" layoutY="41.0" promptText="Directory" />
-                  <TextField fx:id="format" layoutX="14.0" layoutY="84.0" promptText="format" text=".log" />
-                  <TextField fx:id="searchText" layoutX="14.0" layoutY="135.0" promptText="text for search" />
-                  <Button fx:id="Search" layoutX="23.0" layoutY="480.0" mnemonicParsing="false" text="Button" />
-                  <Button fx:id="brose" layoutX="163.0" layoutY="41.0" mnemonicParsing="false" text="Brose" />
+                  <TextField fx:id="format" layoutX="14.0" layoutY="100.0" promptText="format" text=".log" />
+                  <TextField fx:id="searchText" layoutX="14.0" layoutY="171.0" promptText="text for search" />
+                  <Button fx:id="Search" layoutX="23.0" layoutY="477.0" mnemonicParsing="false" text="Button" />
+                  <Button fx:id="brose" layoutX="163.0" layoutY="41.0" mnemonicParsing="false" text="Browse" />
+                  <Label layoutX="14.0" layoutY="24.0" text="Directory" />
+                  <Label layoutX="19.0" layoutY="83.0" prefHeight="17.0" prefWidth="60.0" text="Format" />
+                  <Label layoutX="14.0" layoutY="154.0" prefHeight="17.0" prefWidth="95.0" text="Text for search" />
           </children>
         </AnchorPane>
       </items>
