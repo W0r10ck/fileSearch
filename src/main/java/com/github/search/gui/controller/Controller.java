@@ -107,7 +107,11 @@ public class Controller extends SearchTextInFiles {
         });
 
         Search.setOnAction(event -> {
+            if (listWithFiles != null) {
+                listWithFiles.clear();
+            }
             listWithFiles =  searchFiles(new File(directory.getText()),format.getText(),searchText.getText());
+            treeWiew.setRoot(null);
             treeWiew.setRoot(buildingTree());
         });
 
@@ -183,7 +187,7 @@ public class Controller extends SearchTextInFiles {
         rootItem.setExpanded(true);
         for (Path p : listWithFiles) {
 
-            if (!rootItem.getChildren().contains(p)) {
+            if (!rootItem.getChildren().toString().contains(p.getFileName().toString())) {
                 rootItem.getChildren().add(new TreeItem(p));
             }
         }
