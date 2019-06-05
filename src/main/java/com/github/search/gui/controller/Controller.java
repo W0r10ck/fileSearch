@@ -25,8 +25,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Controller extends SearchTextInFiles {
+public class Controller {
 
+    private final static FilesReader filesReader = new FilesReader(new FileContentFilterImpl(), new FilesFinderImpl());
 
     private List<Path> listWithFiles;
     private Path activityFile;
@@ -105,7 +106,12 @@ public class Controller extends SearchTextInFiles {
                     listWithFiles.clear();
                 }
                 textArea.clear();
-                listWithFiles = searchFiles(new File(directory.getText()), format.getText(), searchText.getText());
+                listWithFiles = filesReader.getFilesWithGivenTextInside(
+                        Paths.get(directory.getText()),
+                        searchText.getText(),
+                        format.getText()
+                );
+                //listWithFiles = searchFiles(new File(directory.getText()), format.getText(), searchText.getText());
                 treeWiew.setRoot(null);
                 treeWiew.setRoot(buildingTree());
                 if(listWithFiles.size() == 0) {
