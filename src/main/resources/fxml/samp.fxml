@@ -20,7 +20,7 @@
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.search.gui.controller.Controller">
   <children>
-    <MenuBar prefHeight="176.0" prefWidth="1076.0" VBox.vgrow="NEVER">
+    <MenuBar prefHeight="107.0" prefWidth="900.0" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
@@ -32,7 +32,7 @@
     </MenuBar>
     <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane>
+        <AnchorPane prefHeight="553.0" prefWidth="302.0">
           <children>
             <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Master" textAlignment="CENTER" wrapText="false">
               <font>
@@ -64,7 +64,7 @@
                   <TextField fx:id="directory" layoutX="14.0" layoutY="41.0" promptText="Directory" />
                   <TextField fx:id="format" layoutX="14.0" layoutY="100.0" promptText="format" text=".log" />
                   <TextField fx:id="searchText" layoutX="14.0" layoutY="171.0" promptText="text for search" />
-                  <Button fx:id="Search" layoutX="23.0" layoutY="477.0" mnemonicParsing="false" text="Button" />
+                  <Button fx:id="Search" layoutX="23.0" layoutY="477.0" mnemonicParsing="false" text="Search" />
                   <Button fx:id="brose" layoutX="163.0" layoutY="41.0" mnemonicParsing="false" text="Browse" />
                   <Label layoutX="14.0" layoutY="24.0" text="Directory" />
                   <Label layoutX="19.0" layoutY="83.0" prefHeight="17.0" prefWidth="60.0" text="Format" />

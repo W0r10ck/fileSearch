@@ -35,23 +35,11 @@ public class Controller extends SearchTextInFiles {
 
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
     private MenuItem newApplication;
 
     @FXML
     private MenuItem clearThisWindow;
 
-
-    @FXML
-    private Font x1;
-
-    @FXML
-    private Color x2;
 
     @FXML
     private TreeView<?> treeWiew;
@@ -95,7 +83,6 @@ public class Controller extends SearchTextInFiles {
     @FXML
     void initialize() {
 
-
         brose.setOnAction(event -> {
             final DirectoryChooser directoryChooser = new DirectoryChooser();
 
@@ -111,12 +98,26 @@ public class Controller extends SearchTextInFiles {
         });
 
         Search.setOnAction(event -> {
-            if (listWithFiles != null) {
-                listWithFiles.clear();
+
+
+            if(directory != null && !searchText.getText().isEmpty() && !format.getText().isEmpty()) {
+                if (listWithFiles != null) {
+                    listWithFiles.clear();
+                }
+                textArea.clear();
+                listWithFiles = searchFiles(new File(directory.getText()), format.getText(), searchText.getText());
+                treeWiew.setRoot(null);
+                treeWiew.setRoot(buildingTree());
+                if(listWithFiles.size() == 0) {
+                    textArea.setText("Nothing found");
+
+                }
+
+            } else {
+
+                treeWiew.setRoot(null);
+                textArea.clear();
             }
-            listWithFiles =  searchFiles(new File(directory.getText()),format.getText(),searchText.getText());
-            treeWiew.setRoot(null);
-            treeWiew.setRoot(buildingTree());
         });
 
 
@@ -204,6 +205,7 @@ public class Controller extends SearchTextInFiles {
     private TreeItem buildingTree () {
         TreeItem rootItem = new TreeItem("Files");
         rootItem.setExpanded(true);
+
         for (Path p : listWithFiles) {
 
             if (!rootItem.getChildren().toString().contains(p.getFileName().toString())) {

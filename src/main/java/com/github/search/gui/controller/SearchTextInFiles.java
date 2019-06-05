@@ -1,7 +1,12 @@
 package com.github.search.gui.controller;
 
+import com.github.search.gui.CustomBufferedReader;
+
+import java.awt.*;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +16,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class SearchTextInFiles {
 
@@ -22,7 +29,7 @@ public class SearchTextInFiles {
         return requiredFiles;
     }
 
-    private static void findFiles(File folder, String format, String textForSearch) {
+    private  void findFiles(File folder, String format, String textForSearch) {
 
        List<String> allFiles = new ArrayList<>();
 
@@ -57,7 +64,7 @@ public class SearchTextInFiles {
 
 
 
-    private static void processAll (List<String> list,int numThreads, String text) throws InterruptedException {
+    private static void processAll(List<String> list, int numThreads, String text) throws InterruptedException {
 
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
         CountDownLatch latch = new CountDownLatch(list.size());
