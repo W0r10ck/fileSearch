@@ -1,14 +1,10 @@
 package com.github.search.gui;
 
-import com.github.search.gui.controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class Main extends Application {
 
@@ -16,6 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/samp.fxml"));
+
         primaryStage.setTitle("Search files");
         primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.show();

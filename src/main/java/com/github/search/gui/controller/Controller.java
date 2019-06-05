@@ -1,24 +1,21 @@
 package com.github.search.gui.controller;
 
+import com.github.search.gui.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import sun.reflect.generics.tree.Tree;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.beans.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -34,7 +31,7 @@ public class Controller extends SearchTextInFiles {
     private List<Path> listWithFiles;
     private Path activityFile;
     private Integer numberStart = 0;
-    private Integer numberEnd = 20;
+    private Integer numberEnd = 25;
 
 
     @FXML
@@ -42,6 +39,13 @@ public class Controller extends SearchTextInFiles {
 
     @FXML
     private URL location;
+
+    @FXML
+    private MenuItem newApplication;
+
+    @FXML
+    private MenuItem clearThisWindow;
+
 
     @FXML
     private Font x1;
@@ -133,7 +137,7 @@ public class Controller extends SearchTextInFiles {
         nextPage.setOnAction(event -> {
 
             numberStart = numberEnd;
-            numberEnd += 20;
+            numberEnd += 25;
 
             try {
                 textArea.setText(showTextFromFile(activityFile));
@@ -149,7 +153,7 @@ public class Controller extends SearchTextInFiles {
         previousPage.setOnAction(event -> {
 
             numberEnd = numberStart;
-            numberStart -=20;
+            numberStart -=25;
 
             try {
                 textArea.setText(showTextFromFile(activityFile));
@@ -160,6 +164,21 @@ public class Controller extends SearchTextInFiles {
 
 
         });
+
+
+        clearThisWindow.setOnAction(event -> {
+
+            Main m = new Main();
+            try {
+                m.start((Stage) anchorid.getScene().getWindow());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+
+
 
 
 
@@ -249,6 +268,48 @@ public class Controller extends SearchTextInFiles {
         return text;
 
     }
+//
+//    private List<TreeItem> listItems = new ArrayList<>();
+//
+//
+//
+//    private void createTree () {
+//
+//        for (Path i : listWithFiles) {
+//
+//            TreeItem item = new TreeItem(i.getFileName());
+//            TreeItem root = new TreeItem(i.getParent());
+//            root.setExpanded(true);
+//            root.getChildren().add(item);
+//
+//            if (listItems == null) {
+//
+//                listItems.add(root);
+//
+//            }
+//
+//
+//
+//
+//        }
+//    }
+
+//    private TreeItem root (TreeItem item) {
+//
+//        if(item.getParent() != directory.getCharacters()) {
+//
+//            TreeItem l = new TreeItem(item);
+//            TreeItem r = new TreeItem(item.getParent());
+//            r.setExpanded(true);
+//            r.getChildren().add(l);
+//
+//            root(r);
+//
+//        }
+//
+//        return r;
+//
+//    }
 
 
 
