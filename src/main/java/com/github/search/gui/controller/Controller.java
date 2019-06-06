@@ -18,12 +18,10 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class Controller {
 
@@ -75,11 +73,6 @@ public class Controller {
     @FXML
     private Button brose;
 
-    @FXML
-    private Font x3;
-
-    @FXML
-    private Color x4;
 
     @FXML
     void initialize() {
