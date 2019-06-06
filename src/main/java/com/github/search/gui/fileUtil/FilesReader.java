@@ -1,4 +1,4 @@
-package com.github.search.gui.controller;
+package com.github.search.gui.fileUtil;
 
 import java.nio.file.Path;
 import java.util.List;

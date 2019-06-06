@@ -1,16 +1,18 @@
 package com.github.search.gui.controller;
 
 import com.github.search.gui.Main;
+import com.github.search.gui.fileUtil.FileContentFilterImpl;
+import com.github.search.gui.fileUtil.FilesFinderImpl;
+import com.github.search.gui.fileUtil.FilesReader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -23,7 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Controller {
+public class ControllerSearch {
 
     private final static FilesReader filesReader = new FilesReader(new FileContentFilterImpl(), new FilesFinderImpl());
 
@@ -42,6 +44,9 @@ public class Controller {
 
     @FXML
     private TreeView<?> treeWiew;
+
+    @FXML
+    private MenuBar menuBar;
 
     @FXML
     private TextArea textArea;
@@ -84,7 +89,7 @@ public class Controller {
 
             File file = directoryChooser.showDialog(stage);
 
-            if(file!= null) {
+            if (file != null) {
 
                 directory.setText(file.getAbsolutePath());
 
@@ -94,7 +99,7 @@ public class Controller {
         Search.setOnAction(event -> {
 
 
-            if(directory != null && !searchText.getText().isEmpty() && !format.getText().isEmpty()) {
+            if (directory != null && !searchText.getText().isEmpty() && !format.getText().isEmpty()) {
                 if (listWithFiles != null) {
                     listWithFiles.clear();
                 }
@@ -107,7 +112,7 @@ public class Controller {
                 //listWithFiles = searchFiles(new File(directory.getText()), format.getText(), searchText.getText());
                 treeWiew.setRoot(null);
                 treeWiew.setRoot(buildingTree());
-                if(listWithFiles.size() == 0) {
+                if (listWithFiles.size() == 0) {
                     textArea.setText("Nothing found");
 
                 }
@@ -146,21 +151,19 @@ public class Controller {
             }
 
 
-
         });
 
 
         previousPage.setOnAction(event -> {
 
             numberEnd = numberStart;
-            numberStart -=25;
+            numberStart -= 25;
 
             try {
                 textArea.setText(showTextFromFile(activityFile));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
 
 
         });
@@ -178,30 +181,28 @@ public class Controller {
         });
 
 
-
-
-
-
     }
 
     @FXML
-    private void mouseClicked (MouseEvent event){
+    private void mouseClicked(MouseEvent event) {
 
         TreeItem<Path> item = (TreeItem<Path>) treeWiew.getSelectionModel().getSelectedItem();
-        activityFile= item.getValue();
-        numberStart=0;
-        numberEnd=20;
-        try {
-            textArea.setText(showTextFromFile(activityFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        if (item.getParent() != null) {
+
+            activityFile = item.getValue();
+            numberStart = 0;
+            numberEnd = 20;
+            try {
+                textArea.setText(showTextFromFile(activityFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
-
-    private TreeItem buildingTree () {
+    private TreeItem buildingTree() {
         TreeItem rootItem = new TreeItem("Files");
         rootItem.setExpanded(true);
 
@@ -215,27 +216,36 @@ public class Controller {
     }
 
 
-    private String showTextFromFile (Path file) throws IOException {
+    /**
+     * The method reads the selected file and displays some text.
+     *
+     * @param file selected file from Tree
+     * @return string with part of the text from the file
+     * @throws IOException if an I/O error occurs reading from the file or a malformed or
+     * unmappable byte sequence is read
+     */
 
-    String show = "";
-    String a = "";
+    private String showTextFromFile(Path file) throws IOException {
 
-        List <String> rows =  Files.readAllLines(Paths.get(file.toString()));
+        String show = "";
+        String a = "";
 
-        if(numberStart > 0){
+        List<String> rows = Files.readAllLines(Paths.get(file.toString()));
+
+        if (numberStart > 0) {
             previousPage.setDisable(false);
-        } else{
+        } else {
             numberStart = 0;
             previousPage.setDisable(true);
         }
 
-        if(numberEnd > rows.size()) {
-            numberEnd=rows.size();
+        if (numberEnd > rows.size()) {
+            numberEnd = rows.size();
             nextPage.setDisable(true);
         }
 
         if (numberEnd <= rows.size()) {
-            if (numberEnd < rows.size()){
+            if (numberEnd < rows.size()) {
                 nextPage.setDisable(false);
             }
             for (int i = numberStart; i < numberEnd; i++) {
@@ -243,77 +253,40 @@ public class Controller {
             }
 
             show = a;
-            a=null;
+            a = null;
         }
-
-
-
 
         return show;
 
     }
 
-
-    private String copyAll (Path file) throws IOException {
+    /**
+     *  the method completely reads the selected file and returns all the contents in the string
+     * @param file selected file from Tree
+     * @return string with all content from file
+     * @throws IOException if an I/O error occurs reading from the file or a malformed or
+     * unmappable byte sequence is read
+     */
+    private String copyAll(Path file) throws IOException {
 
         String text = "";
 
-        List <String> rows =  Files.readAllLines(Paths.get(file.toString()));
+        List<String> rows = Files.readAllLines(Paths.get(file.toString()));
 
 
-            for (int i = 0; i < rows.size(); i++) {
-                text += rows.get(i) + '\n';
-            }
+        for (int i = 0; i < rows.size(); i++) {
+            text += rows.get(i) + '\n';
+        }
 
 
         return text;
 
     }
-//
-//    private List<TreeItem> listItems = new ArrayList<>();
-//
-//
-//
-//    private void createTree () {
-//
-//        for (Path i : listWithFiles) {
-//
-//            TreeItem item = new TreeItem(i.getFileName());
-//            TreeItem root = new TreeItem(i.getParent());
-//            root.setExpanded(true);
-//            root.getChildren().add(item);
-//
-//            if (listItems == null) {
-//
-//                listItems.add(root);
-//
-//            }
-//
-//
-//
-//
-//        }
-//    }
-
-//    private TreeItem root (TreeItem item) {
-//
-//        if(item.getParent() != directory.getCharacters()) {
-//
-//            TreeItem l = new TreeItem(item);
-//            TreeItem r = new TreeItem(item.getParent());
-//            r.setExpanded(true);
-//            r.getChildren().add(l);
-//
-//            root(r);
-//
-//        }
-//
-//        return r;
-//
-//    }
 
 
 
+    private void createFuckingTree () {
 
+    }
 
 }

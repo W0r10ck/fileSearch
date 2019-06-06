@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -12,19 +11,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.search.gui.controller.Controller">
+<VBox prefHeight="763.0" prefWidth="1135.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.search.gui.controller.ControllerSearch">
   <children>
-    <MenuBar prefHeight="107.0" prefWidth="900.0" VBox.vgrow="NEVER">
+    <MenuBar fx:id="menuBar" prefHeight="37.0" prefWidth="1135.0" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem fx:id="newApplication" mnemonicParsing="false" text="New" />
                   <MenuItem fx:id="clearThisWindow" mnemonicParsing="false" text="Clear this window" />
           </items>
         </Menu>
@@ -42,19 +38,18 @@
                 <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
               </textFill>
             </Label>
-                  <TreeView layoutX="11.0" layoutY="14.0" prefHeight="537.0" prefWidth="198.0" />
-                  <TreeView fx:id="treeWiew" onContextMenuRequested="#mouseClicked" onMouseClicked="#mouseClicked" prefHeight="551.0" prefWidth="302.0" />
+                  <TreeView layoutX="-2.0" layoutY="-3.0" prefHeight="724.0" prefWidth="302.0" />
+                  <TreeView fx:id="treeWiew" onContextMenuRequested="#mouseClicked" onMouseClicked="#mouseClicked" prefHeight="724.0" prefWidth="302.0" />
           </children>
         </AnchorPane>
         <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
           <content>
-            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0">
+            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="720.0" prefWidth="557.0">
               <children>
-                <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="View" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                        <TextArea fx:id="textArea" layoutX="-2.0" layoutY="-2.0" prefHeight="453.0" prefWidth="587.0" promptText="Found text" />
-                        <Button fx:id="nextPage" layoutX="283.0" layoutY="472.0" mnemonicParsing="false" text="Next" />
-                        <Button fx:id="previousPage" layoutX="52.0" layoutY="472.0" mnemonicParsing="false" text="Back" />
-                        <Button fx:id="copyAll" layoutX="160.0" layoutY="472.0" mnemonicParsing="false" text="Copy All" />
+                        <TextArea fx:id="textArea" layoutX="-2.0" layoutY="-2.0" prefHeight="654.0" prefWidth="537.0" promptText="Found text" />
+                        <Button fx:id="nextPage" layoutX="376.0" layoutY="663.0" mnemonicParsing="false" text="Next" />
+                        <Button fx:id="previousPage" layoutX="128.0" layoutY="663.0" mnemonicParsing="false" text="Back" />
+                        <Button fx:id="copyAll" layoutX="253.0" layoutY="663.0" mnemonicParsing="false" text="Copy All" />
               </children>
             </AnchorPane>
           </content>
@@ -64,7 +59,7 @@
                   <TextField fx:id="directory" layoutX="14.0" layoutY="41.0" promptText="Directory" />
                   <TextField fx:id="format" layoutX="14.0" layoutY="100.0" promptText="format" text=".log" />
                   <TextField fx:id="searchText" layoutX="14.0" layoutY="171.0" promptText="text for search" />
-                  <Button fx:id="Search" layoutX="23.0" layoutY="477.0" mnemonicParsing="false" text="Search" />
+                  <Button fx:id="Search" layoutX="192.0" layoutY="171.0" mnemonicParsing="false" text="Search" />
                   <Button fx:id="brose" layoutX="163.0" layoutY="41.0" mnemonicParsing="false" text="Browse" />
                   <Label layoutX="14.0" layoutY="24.0" text="Directory" />
                   <Label layoutX="19.0" layoutY="83.0" prefHeight="17.0" prefWidth="60.0" text="Format" />
@@ -73,22 +68,5 @@
         </AnchorPane>
       </items>
     </SplitPane>
-    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
-      <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
-          <font>
-            <Font size="11.0" fx:id="x3" />
-          </font>
-          <textFill>
-            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
-          </textFill>
-        </Label>
-        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
-      </children>
-      <padding>
-        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-      </padding>
-    </HBox>
   </children>
 </VBox>
