@@ -23,7 +23,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ControllerSearch {
 
@@ -32,7 +35,12 @@ public class ControllerSearch {
     private List<Path> listWithFiles;
     private Path activityFile;
     private Integer numberStart = 0;
-    private Integer numberEnd = 25;
+    private Integer numberEnd = 50;
+
+    private TreeItem <Path> mainRoot;
+    private Map<String,Path> mapWithFiles = new HashMap<>();
+
+
 
 
     @FXML
@@ -43,7 +51,7 @@ public class ControllerSearch {
 
 
     @FXML
-    private TreeView<?> treeWiew;
+    private TreeView<Path> treeWiew;
 
     @FXML
     private MenuBar menuBar;
@@ -99,6 +107,7 @@ public class ControllerSearch {
         Search.setOnAction(event -> {
 
 
+
             if (directory != null && !searchText.getText().isEmpty() && !format.getText().isEmpty()) {
                 if (listWithFiles != null) {
                     listWithFiles.clear();
@@ -110,8 +119,16 @@ public class ControllerSearch {
                         format.getText()
                 );
                 //listWithFiles = searchFiles(new File(directory.getText()), format.getText(), searchText.getText());
+
+                mainRoot = new TreeItem<Path>(Paths.get(directory.getText()));
+                mainRoot.setExpanded(true);
+
+                listWithFiles.stream().forEach(x -> mapWithFiles.put(x.getFileName().toString(),x));
+
+                listWithFiles.stream().forEach(x -> sortedMap(x,new TreeItem <Path> (Paths.get(x.getFileName().toString()))));
+
                 treeWiew.setRoot(null);
-                treeWiew.setRoot(buildingTree());
+                treeWiew.setRoot(mainRoot);
                 if (listWithFiles.size() == 0) {
                     textArea.setText("Nothing found");
 
@@ -142,7 +159,7 @@ public class ControllerSearch {
         nextPage.setOnAction(event -> {
 
             numberStart = numberEnd;
-            numberEnd += 25;
+            numberEnd += 50;
 
             try {
                 textArea.setText(showTextFromFile(activityFile));
@@ -157,7 +174,7 @@ public class ControllerSearch {
         previousPage.setOnAction(event -> {
 
             numberEnd = numberStart;
-            numberStart -= 25;
+            numberStart -= 50;
 
             try {
                 textArea.setText(showTextFromFile(activityFile));
@@ -188,11 +205,11 @@ public class ControllerSearch {
 
         TreeItem<Path> item = (TreeItem<Path>) treeWiew.getSelectionModel().getSelectedItem();
 
-        if (item.getParent() != null) {
+        if (item.getValue().toString().endsWith(format.getText())) {
 
-            activityFile = item.getValue();
+            activityFile = mapWithFiles.get(item.getValue().toString());
             numberStart = 0;
-            numberEnd = 20;
+            numberEnd = 50;
             try {
                 textArea.setText(showTextFromFile(activityFile));
             } catch (IOException e) {
@@ -201,19 +218,6 @@ public class ControllerSearch {
         }
     }
 
-
-    private TreeItem buildingTree() {
-        TreeItem rootItem = new TreeItem("Files");
-        rootItem.setExpanded(true);
-
-        for (Path p : listWithFiles) {
-
-            if (!rootItem.getChildren().toString().contains(p.getFileName().toString())) {
-                rootItem.getChildren().add(new TreeItem(p));
-            }
-        }
-        return rootItem;
-    }
 
 
     /**
@@ -285,8 +289,92 @@ public class ControllerSearch {
 
 
 
-    private void createFuckingTree () {
+
+    private void sortedMap (Path path, TreeItem <Path> item) {
+
+        if (path.getParent().toString().equals(directory.getText())) {
+            mainRoot.getChildren().add(item);
+        } else {
+
+            if (runOnRoot(mainRoot,new TreeItem(path.getParent().getFileName()),item) == false) {
+
+                if (mainRoot.getChildren().size() == 0) {
+                    setFirstRoot(path, item);
+                }
+
+            } else {
+                TreeItem <Path> newRoot = new TreeItem<>(path.getParent().getFileName());
+                newRoot.setExpanded(true);
+                newRoot.getChildren().add(item);
+                sortedMap(path.getParent(),newRoot);
+            }
+
+
+        }
 
     }
+
+
+    private boolean runOnRoot ( TreeItem <Path> rootM, TreeItem <Path> itemParentName,TreeItem <Path> item) {
+
+        if(mainRoot.getChildren().size() != 0) {
+
+            if (!mainRoot.getValue().getFileName().equals(itemParentName.getValue())) {
+
+
+                for (TreeItem<Path> a : rootM.getChildren()) {
+
+                    if (a.getValue().equals(itemParentName.getValue())) {
+                        a.setExpanded(true);
+                        a.getChildren().add(item);
+                        return false;
+                    } else {
+                        if(!a.getValue().toString().endsWith(format.getText())) {
+                            runOnRoot(a, itemParentName, item);
+                        } else {
+                            return true;
+                        }
+
+                    }
+
+                }
+
+            } else {
+
+                mainRoot.getChildren().add(item);
+                return true;
+
+            }
+
+
+
+        } else {
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+
+    private void setFirstRoot (Path path,TreeItem <Path> item) {
+
+        if (!mainRoot.getValue().getFileName().equals(path.getParent().getFileName())) {
+
+            TreeItem <Path> newRoot = new TreeItem<>(path.getParent().getFileName());
+            newRoot.setExpanded(true);
+            newRoot.getChildren().add(item);
+            setFirstRoot(path.getParent(),newRoot);
+
+        } else {
+            mainRoot.getChildren().add(item);
+        }
+
+    }
+
+
+
 
 }
