@@ -125,7 +125,7 @@ public class ControllerSearch {
 
                 listWithFiles.stream().forEach(x -> mapWithFiles.put(x.getFileName().toString(),x));
 
-                listWithFiles.stream().forEach(x -> sortedMap(x,new TreeItem <Path> (Paths.get(x.getFileName().toString()))));
+                listWithFiles.stream().forEach(x -> createRootsOfTree(x,new TreeItem <Path> (Paths.get(x.getFileName().toString()))));
 
                 treeWiew.setRoot(null);
                 treeWiew.setRoot(mainRoot);
@@ -288,25 +288,28 @@ public class ControllerSearch {
     }
 
 
-
-
-    private void sortedMap (Path path, TreeItem <Path> item) {
+    /**
+     *The method creates a tree based on a list with absolute paths to the files.
+     * @param path the path to the file
+     * @param item tree element created from a file.
+     */
+    private void createRootsOfTree (Path path, TreeItem <Path> item) {
 
         if (path.getParent().toString().equals(directory.getText())) {
             mainRoot.getChildren().add(item);
         } else {
 
-            if (runOnRoot(mainRoot,new TreeItem(path.getParent().getFileName()),item) == false) {
+            if (joggingOnTheTree(mainRoot,new TreeItem(path.getParent().getFileName()),item) == false) {
 
                 if (mainRoot.getChildren().size() == 0) {
-                    setFirstRoot(path, item);
+                    createFirstRoot(path, item);
                 }
 
             } else {
                 TreeItem <Path> newRoot = new TreeItem<>(path.getParent().getFileName());
                 newRoot.setExpanded(true);
                 newRoot.getChildren().add(item);
-                sortedMap(path.getParent(),newRoot);
+                createRootsOfTree(path.getParent(),newRoot);
             }
 
 
@@ -315,14 +318,22 @@ public class ControllerSearch {
     }
 
 
-    private boolean runOnRoot ( TreeItem <Path> rootM, TreeItem <Path> itemParentName,TreeItem <Path> item) {
+    /**
+     * the method runs over each child of the root and fills the tree with the files at the right roots.
+     *
+     * @param rootMain the main root of the tree
+     * @param itemParentName patent of the item
+     * @param item tree element created from a file.
+     * @return
+     */
+    private boolean joggingOnTheTree ( TreeItem <Path> rootMain, TreeItem <Path> itemParentName,TreeItem <Path> item) {
 
         if(mainRoot.getChildren().size() != 0) {
 
             if (!mainRoot.getValue().getFileName().equals(itemParentName.getValue())) {
 
 
-                for (TreeItem<Path> a : rootM.getChildren()) {
+                for (TreeItem<Path> a : rootMain.getChildren()) {
 
                     if (a.getValue().equals(itemParentName.getValue())) {
                         a.setExpanded(true);
@@ -330,7 +341,7 @@ public class ControllerSearch {
                         return false;
                     } else {
                         if(!a.getValue().toString().endsWith(format.getText())) {
-                            runOnRoot(a, itemParentName, item);
+                            joggingOnTheTree(a, itemParentName, item);
                         } else {
                             return true;
                         }
@@ -338,7 +349,7 @@ public class ControllerSearch {
                     }
 
                 }
-
+                
             } else {
 
                 mainRoot.getChildren().add(item);
@@ -358,23 +369,24 @@ public class ControllerSearch {
 
     }
 
-
-    private void setFirstRoot (Path path,TreeItem <Path> item) {
+    /**
+     * The method fills the tree by parsing the absolute path of the first file if the tree is empty.
+     * @param path path to the first file
+     * @param item tree element created from a first file.
+     */
+    private void createFirstRoot (Path path,TreeItem <Path> item) {
 
         if (!mainRoot.getValue().getFileName().equals(path.getParent().getFileName())) {
 
             TreeItem <Path> newRoot = new TreeItem<>(path.getParent().getFileName());
             newRoot.setExpanded(true);
             newRoot.getChildren().add(item);
-            setFirstRoot(path.getParent(),newRoot);
+            createFirstRoot(path.getParent(),newRoot);
 
         } else {
             mainRoot.getChildren().add(item);
         }
 
     }
-
-
-
-
+    
 }
